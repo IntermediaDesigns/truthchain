@@ -1,0 +1,236 @@
+{
+    "abi": [
+        {
+            "inputs": [],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "bytes32",
+                    "name": "contentHash",
+                    "type": "bytes32"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "verifier",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "bool",
+                    "name": "isVerified",
+                    "type": "bool"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint8",
+                    "name": "confidenceScore",
+                    "type": "uint8"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "timestamp",
+                    "type": "uint256"
+                }
+            ],
+            "name": "ContentVerified",
+            "type": "event"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "bytes32",
+                    "name": "contentHash",
+                    "type": "bytes32"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "isVerified",
+                    "type": "bool"
+                },
+                {
+                    "internalType": "uint8",
+                    "name": "confidenceScore",
+                    "type": "uint8"
+                },
+                {
+                    "internalType": "string",
+                    "name": "contentType",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "aiModelUsed",
+                    "type": "string"
+                }
+            ],
+            "name": "verifyContent",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "name": "allContentHashes",
+            "outputs": [
+                {
+                    "internalType": "bytes32",
+                    "name": "",
+                    "type": "bytes32"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "index",
+                    "type": "uint256"
+                }
+            ],
+            "name": "getContentHashAtIndex",
+            "outputs": [
+                {
+                    "internalType": "bytes32",
+                    "name": "",
+                    "type": "bytes32"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "bytes32",
+                    "name": "contentHash",
+                    "type": "bytes32"
+                }
+            ],
+            "name": "getVerification",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "verifier",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "timestamp",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "isVerified",
+                    "type": "bool"
+                },
+                {
+                    "internalType": "uint8",
+                    "name": "confidenceScore",
+                    "type": "uint8"
+                },
+                {
+                    "internalType": "string",
+                    "name": "contentType",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "aiModelUsed",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "getVerificationCount",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "owner",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "bytes32",
+                    "name": "",
+                    "type": "bytes32"
+                }
+            ],
+            "name": "verifications",
+            "outputs": [
+                {
+                    "internalType": "bytes32",
+                    "name": "contentHash",
+                    "type": "bytes32"
+                },
+                {
+                    "internalType": "address",
+                    "name": "verifier",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "timestamp",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "isVerified",
+                    "type": "bool"
+                },
+                {
+                    "internalType": "uint8",
+                    "name": "confidenceScore",
+                    "type": "uint8"
+                },
+                {
+                    "internalType": "string",
+                    "name": "contentType",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "aiModelUsed",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        }
+    ]
+  }
