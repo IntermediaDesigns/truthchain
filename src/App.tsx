@@ -239,6 +239,8 @@ function App() {
               <BlockchainRecord
                 record={blockchainRecord}
                 contentHash={contentHash}
+                aiResult={verificationResult}
+                contentType={selectedContentType}
               />
             </div>
           )}
