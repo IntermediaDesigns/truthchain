@@ -104,7 +104,7 @@ const ContentSubmission: React.FC<ContentSubmissionProps> = ({
           <div className="mb-4">
             <label
               htmlFor="urlContent"
-              className="block text-gray-700 font-medium mb-2"
+              className="block text-gray-700 font-medium mb-2 dark:text-gray-300"
             >
               URL
             </label>
@@ -124,7 +124,7 @@ const ContentSubmission: React.FC<ContentSubmissionProps> = ({
           <div className="mb-4">
             <label
               htmlFor="imageContent"
-              className="block text-gray-700 font-medium mb-2"
+              className="block text-gray-700 font-medium mb-2 dark:text-gray-300"
             >
               Image
             </label>
@@ -133,7 +133,7 @@ const ContentSubmission: React.FC<ContentSubmissionProps> = ({
               type="file"
               accept="image/*"
               onChange={handleImageUpload}
-              className="w-full"
+              className="w-full text-amber-500 cursor-pointer hover:text-green-300 underline"
               disabled={isProcessing}
             />
             {imagePreview && (
@@ -150,7 +150,7 @@ const ContentSubmission: React.FC<ContentSubmissionProps> = ({
 
         <button
           type="submit"
-          className={`w-full py-2 px-4 rounded-md text-white font-medium ${
+          className={`w-full py-2 px-4 rounded-md text-white font-medium cursor-pointer ${
             isProcessing
               ? "bg-gray-400 cursor-not-allowed dark:bg-gray-600"
               : "bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-blue-700 dark:hover:bg-blue-800"

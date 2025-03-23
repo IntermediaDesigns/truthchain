@@ -113,7 +113,7 @@ const BlockchainRecord: React.FC<BlockchainRecordProps> = ({
             </code>
             <button
               onClick={() => copyToClipboard(contentHash)}
-              className="ml-2 p-1 text-gray-500 hover:text-blue-500"
+              className="ml-2 p-1 text-gray-500 cursor-pointer hover:text-blue-500"
               title="Copy to clipboard"
             >
               <svg
@@ -180,7 +180,7 @@ const BlockchainRecord: React.FC<BlockchainRecordProps> = ({
               onClick={() =>
                 copyToClipboard(fullAddress(displayRecord.verifier))
               }
-              className="ml-2 p-1 text-gray-500 hover:text-blue-500"
+              className="ml-2 p-1 text-gray-500 cursor-pointer hover:text-blue-500"
               title="Copy full address"
             >
               <svg

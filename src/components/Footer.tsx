@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const Footer: React.FC = () => {
   return (
@@ -8,10 +8,11 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-bold mb-3">TruthChain</h3>
             <p className="text-gray-400">
-              Combining AI and blockchain technology to combat misinformation and verify content authenticity.
+              Combining AI and blockchain technology to combat misinformation
+              and verify content authenticity.
             </p>
           </div>
-          
+
           <div>
             <h3 className="text-lg font-bold mb-3">Features</h3>
             <ul className="space-y-2 text-gray-400">
@@ -21,7 +22,7 @@ const Footer: React.FC = () => {
               <li>Transparent and decentralized</li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="text-lg font-bold mb-3">Technologies</h3>
             <ul className="space-y-2 text-gray-400">
@@ -32,9 +33,9 @@ const Footer: React.FC = () => {
             </ul>
           </div>
         </div>
-        
+
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-500">
-          <p>Created for the AI + Blockchain Hackathon | {new Date().getFullYear()}</p>
+          <p>© Copyright TruthChain | {new Date().getFullYear()}</p>
         </div>
       </div>
     </footer>

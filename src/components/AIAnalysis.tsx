@@ -116,8 +116,8 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({ result, isLoading }) => {
 
       <div className="space-y-4">
         <div>
-        <h3 className="font-bold text-gray-700 mb-2 dark:text-gray-300">AI Model</h3>
-        <div className="bg-gray-50 p-3 rounded-md dark:bg-gray-700">
+        <h3 className="font-bold text-gray-700 mb-2">AI Model</h3>
+        <div className="bg-gray-50 p-3 rounded-md dark:bg-gray-100">
             <div className="flex items-center">
               <svg
                 className="w-5 h-5 text-indigo-600 mr-2"
@@ -138,8 +138,8 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({ result, isLoading }) => {
         </div>
 
         <div>
-        <h3 className="font-bold text-gray-700 mb-2 dark:text-gray-300">Confidence Score</h3>
-        <div className="bg-gray-50 p-3 rounded-md dark:bg-gray-700">
+        <h3 className="font-bold text-gray-700 mb-2">Confidence Score</h3>
+        <div className="bg-gray-50 p-3 rounded-md dark:bg-gray-100">
             <div className="mb-1 flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">
                 {result.confidenceScore}%
@@ -153,7 +153,7 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({ result, isLoading }) => {
                 style={{ width: `${result.confidenceScore}%` }}
               ></div>
             </div>
-            <div className="mt-2 text-xs text-gray-500">
+            <div className="mt-2 text-xs text-gray-700">
               {result.confidenceScore < 30 && "Low confidence"}
               {result.confidenceScore >= 30 &&
                 result.confidenceScore < 70 &&
@@ -164,8 +164,8 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({ result, isLoading }) => {
         </div>
 
         <div>
-        <h3 className="font-bold text-gray-700 mb-2 dark:text-gray-300">Detailed Analysis</h3>
-        <div className="bg-gray-50 p-3 rounded-md dark:bg-gray-700 dark:text-gray-200">
+        <h3 className="font-bold text-gray-700 mb-2 dark:text-gray-700">Detailed Analysis</h3>
+        <div className="bg-gray-50 p-3 rounded-md dark:bg-gray-100 text-gray-700">
             <p className="text-gray-700 whitespace-pre-line">
               {result.explanation}
             </p>

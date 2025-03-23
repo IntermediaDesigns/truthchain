@@ -133,10 +133,10 @@ function App() {
       <main className="container mx-auto px-4 py-8 flex-grow">
         <div className="max-w-6xl mx-auto">
           <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-4">
+            <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center">
               Detect Misinformation with AI & Blockchain
             </h1>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 mb-6 text-center">
               TruthChain uses AI to analyze content and stores verification
               records immutably on the blockchain. Submit text, an image, or a
               URL below to check its authenticity.
