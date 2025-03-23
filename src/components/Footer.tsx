@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-3">TruthChain</h3>
+            <h3 className="text-3xl font-bold mb-3">TruthChain</h3>
             <p className="text-gray-400">
               Combining AI and blockchain technology to combat misinformation
               and verify content authenticity.
@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h3 className="text-lg font-bold mb-3">Features</h3>
+            <h3 className="text-xl font-bold mb-3">Features</h3>
             <ul className="space-y-2 text-gray-400">
               <li>AI-powered content analysis</li>
               <li>Blockchain verification records</li>
@@ -24,9 +24,10 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h3 className="text-lg font-bold mb-3">Technologies</h3>
+            <h3 className="text-xl font-bold mb-3">Technologies</h3>
             <ul className="space-y-2 text-gray-400">
-              <li>React + TypeScript</li>
+              <li>Vite/React + TypeScript + TailwindCSS</li>
+              <li>Gemini AI</li>
               <li>Transformers.js AI</li>
               <li>Ethereum blockchain</li>
               <li>Solidity smart contracts</li>

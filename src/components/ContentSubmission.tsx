@@ -71,7 +71,7 @@ const ContentSubmission: React.FC<ContentSubmissionProps> = ({
             id="contentType"
             value={contentType}
             onChange={handleTypeChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="w-full px-3 py-2 border cursor-pointer border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             disabled={isProcessing}
           >
             <option value={ContentType.TEXT}>Text</option>
@@ -84,7 +84,7 @@ const ContentSubmission: React.FC<ContentSubmissionProps> = ({
           <div className="mb-4">
             <label
               htmlFor="textContent"
-              className="block text-gray-700 font-medium mb-2"
+              className="block text-gray-700 font-medium mb-2 dark:text-gray-300"
             >
               Text Content
             </label>
@@ -128,14 +128,22 @@ const ContentSubmission: React.FC<ContentSubmissionProps> = ({
             >
               Image
             </label>
-            <input
-              id="imageContent"
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="w-full text-amber-500 cursor-pointer hover:text-green-300 underline"
-              disabled={isProcessing}
-            />
+            <div className="relative">
+              <label
+                htmlFor="imageContent"
+                className="inline-block px-4 py-2 bg-gray-200 text-gray-700 rounded cursor-pointer hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+              >
+                Choose File
+              </label>
+              <input
+                id="imageContent"
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+                disabled={isProcessing}
+              />
+            </div>
             {imagePreview && (
               <div className="mt-3">
                 <img

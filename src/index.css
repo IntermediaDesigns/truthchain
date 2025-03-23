@@ -86,3 +86,8 @@ html {
     transform: translate(24px, 0);
   }
 }
+
+/* Custom styles for select options */
+option {
+  cursor: pointer;
+}
