@@ -59,6 +59,27 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({ result, isLoading }) => {
   const getTextColor = (isVerified: boolean) => {
     return isVerified ? 'text-green-800' : 'text-red-800';
   };
+  
+  // Create a short summary for the status box
+  const getVerificationSummary = (isVerified: boolean, confidenceScore: number) => {
+    if (isVerified) {
+      if (confidenceScore > 90) {
+        return "This content appears highly credible.";
+      } else if (confidenceScore > 75) {
+        return "This content seems reasonably credible.";
+      } else {
+        return "This content appears somewhat credible.";
+      }
+    } else {
+      if (confidenceScore < 30) {
+        return "This content shows strong indicators of being misleading.";
+      } else if (confidenceScore < 50) {
+        return "This content has several concerns about its accuracy.";
+      } else {
+        return "This content may contain questionable information.";
+      }
+    }
+  };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
@@ -78,7 +99,7 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({ result, isLoading }) => {
               {result.isVerified ? 'Content Appears Authentic' : 'Potentially Misleading Content'}
             </h3>
             <p className={`${getTextColor(result.isVerified)}`}>
-              {result.explanation}
+              {getVerificationSummary(result.isVerified, result.confidenceScore)}
             </p>
           </div>
         </div>
@@ -121,9 +142,9 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({ result, isLoading }) => {
         </div>
         
         <div>
-          <h3 className="font-bold text-gray-700 mb-2">Explanation</h3>
+          <h3 className="font-bold text-gray-700 mb-2">Detailed Analysis</h3>
           <div className="bg-gray-50 p-3 rounded-md">
-            <p className="text-gray-700">{result.explanation}</p>
+            <p className="text-gray-700 whitespace-pre-line">{result.explanation}</p>
           </div>
         </div>
       </div>

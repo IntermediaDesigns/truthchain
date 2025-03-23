@@ -86,15 +86,18 @@ export class AIService {
               role: "user",
               parts: [
                 {
-                  text: `You are a fact-checking AI. Evaluate the following statement for accuracy, 
-                  looking for claims that can be verified or refuted. Respond with a JSON object that has
-                  three fields: 
-                  1. "isVerified" (boolean - true if content appears credible, false if likely misleading)
-                  2. "confidenceScore" (number between 0-100)
-                  3. "explanation" (string explaining your reasoning)
-                  Base your rating on known facts and reliable information.
-                  
-                  Statement to verify: "${text}"`,
+                  text: `You are a fact-checking AI operating as part of a blockchain-based content verification system.
+  
+  Your task is to evaluate the following statement for accuracy and credibility.
+  
+  In your response, provide a JSON object with these fields:
+  1. "isVerified" (boolean): true if content appears generally credible, false if likely misleading
+  2. "confidenceScore" (number): a score between 0-100 representing your confidence in the assessment
+  3. "explanation" (string): a DETAILED analysis explaining your reasoning, evidence considered, and specific credibility markers or red flags you identified - this should be at least 3-4 sentences long and will be displayed in a separate "Detailed Analysis" section
+  
+  Make your assessment based on factual accuracy, source credibility patterns, and information integrity. Be thorough in your explanation while keeping the summary judgment clear.
+  
+  Statement to verify: "${text}"`,
                 },
               ],
             },
@@ -301,15 +304,18 @@ export class AIService {
                   role: "user",
                   parts: [
                     {
-                      text: `You are a URL and domain credibility verification AI. 
-                      Evaluate the following URL and determine if it's from a trustworthy source.
-                      Respond with a JSON object that has three fields:
-                      1. "isVerified" (boolean - true if the domain appears credible, false if likely suspicious)
-                      2. "confidenceScore" (number between 0-100)
-                      3. "explanation" (string explaining your reasoning)
-                      Base your evaluation on domain reputation, known trusted sources, and URL structure.
-                      
-                      URL to verify: "${url}"`,
+                      text: `You are an expert URL and domain verification system evaluating a web resource.
+  
+  Your task is to analyze this URL for credibility and trustworthiness.
+  
+  In your response, provide a JSON object with these fields:
+  1. "isVerified" (boolean): true if the domain appears credible/trustworthy, false if likely suspicious
+  2. "confidenceScore" (number): a score between 0-100 representing your confidence in the assessment
+  3. "explanation" (string): a DETAILED analysis of why you reached this conclusion, including domain reputation factors, TLD assessment, known practices of the website/organization, and any specific red flags - this should be at least 3-4 sentences and will be shown in a "Detailed Analysis" section
+  
+  Base your assessment on domain reputation, URL structure, known trusted sources, and other relevant factors.
+  
+  URL to verify: "${url}"`,
                     },
                   ],
                 },
@@ -519,16 +525,23 @@ export class AIService {
                   role: "user",
                   parts: [
                     {
-                      text: 'Analyze this image and determine if it appears authentic or if it shows signs of manipulation or AI generation. Respond with a JSON object that has three fields: 1. "isVerified" (boolean - true if the image appears authentic, false if likely manipulated), 2. "confidenceScore" (number between 0-100), 3. "explanation" (string explaining your reasoning)',
+                      text: `As an image verification specialist, analyze this image for authenticity and potential manipulation.
+  
+  Provide your analysis as a JSON object with these fields:
+  1. "isVerified" (boolean): true if the image appears authentic/unaltered, false if it shows signs of manipulation
+  2. "confidenceScore" (number): a score between 0-100 representing your confidence
+  3. "explanation" (string): a DETAILED analysis explaining your assessment, what the image appears to show, any signs of alteration you noticed, and quality indicators - this should be at least 3-4 sentences and will be shown in a separate "Detailed Analysis" section
+  
+  Be comprehensive in your detailed explanation but keep the top-level authenticity judgment concise.`
                     },
                     {
                       inline_data: {
                         mime_type: "image/jpeg",
-                        data: base64Data,
-                      },
-                    },
-                  ],
-                },
+                        data: base64Data
+                      }
+                    }
+                  ]
+                }
               ],
               generationConfig: {
                 temperature: 0.2,
