@@ -26,23 +26,21 @@ export class AIService {
     console.log("AI service initializing...");
 
     try {
-      const progress = (data: any) => {
-        console.log(`Loading ${data.file}: ${data.progress.toFixed(2)}%`);
-      };
+      // Progress callback is removed as it's not compatible with the PretrainedOptions type
 
       console.log("Loading image classification model...");
       this.imageClassifier = await transformers.pipeline(
         "image-classification",
-        "Xenova/vit-base-patch16-224",
-        { progress }
+        "Xenova/vit-base-patch16-224"
+        // Remove progress parameter to fix TypeScript error
       );
       this.isImageClassifierReady = true;
       console.log("Image classification model loaded");
       console.log("Loading image manipulation detection model...");
       this.imageManipulationDetector = await transformers.pipeline(
         "image-classification",
-        "Xenova/swin-tiny-patch4-window7-224",
-        { progress }
+        "Xenova/swin-tiny-patch4-window7-224"
+        // Remove progress parameter to fix TypeScript error
       );
       this.isManipulationDetectorReady = true;
       console.log("Image manipulation detection model loaded");
@@ -334,7 +332,7 @@ export class AIService {
     }
   }
 
-  private fallbackUrlAnalysis(url: string, domain: string): VerificationResult {
+  private fallbackUrlAnalysis(_url: string, domain: string): VerificationResult {
     const trustedDomains = [
       "wikipedia.org",
       "github.com",
@@ -545,7 +543,8 @@ Be comprehensive in your detailed explanation but keep the top-level authenticit
       ]);
 
       const topClass = classificationResult[0];
-      const topManipulationClass = manipulationResult[0];
+      // topManipulationClass is unused, so we'll comment it out
+      // const topManipulationClass = manipulationResult[0];
 
       let authenticityScore = 0;
 

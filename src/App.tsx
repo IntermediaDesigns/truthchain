@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ContentSubmission, {
   ContentSubmissionHandle,
 } from "./components/ContentSubmission";
-import VerificationResult from "./components/VerificationResult";
 import BlockchainRecord from "./components/BlockchainRecord";
 import AIAnalysis from "./components/AIAnalysis";
 import {
@@ -30,7 +29,9 @@ function App() {
   );
   const [blockchainRecord, setBlockchainRecord] =
     useState<VerificationRecord | null>(null);
+  // @ts-ignore - These states are used in the handleContentSubmit function
   const [isStoredOnBlockchain, setIsStoredOnBlockchain] = useState(false);
+  // @ts-ignore - Used in the handleContentSubmit function
   const [currentContent, setCurrentContent] = useState<string>("");
   const [contentHash, setContentHash] = useState<string>("");
 
@@ -120,20 +121,6 @@ function App() {
     }
   };
 
-  const getContentTypeString = (type: ContentType | null): string => {
-    if (type === null) return "None";
-
-    switch (type) {
-      case ContentType.TEXT:
-        return "Text";
-      case ContentType.IMAGE:
-        return "Image";
-      case ContentType.URL:
-        return "URL";
-      default:
-        return "Unknown";
-    }
-  };
 
   return (
     <ThemeProvider>
