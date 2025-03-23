@@ -6,7 +6,7 @@ interface BlockchainRecordProps {
   record: VerificationRecord | null;
   contentHash?: string;
   aiResult?: VerificationResult | null;
-  contentType?: ContentType; // Add this prop
+  contentType?: ContentType | null; // Updated to accept null
 }
 
 const BlockchainRecord: React.FC<BlockchainRecordProps> = ({
@@ -36,6 +36,8 @@ const BlockchainRecord: React.FC<BlockchainRecordProps> = ({
       contentTypeString = "url";
     } else if (contentType === ContentType.IMAGE) {
       contentTypeString = "image";
+    } else if (contentType === null) {
+      contentTypeString = "unknown";
     }
 
     const mockBlockchainRecord: VerificationRecord = {

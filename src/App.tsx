@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import ContentSubmission from "./components/ContentSubmission";
+import ContentSubmission, { ContentSubmissionHandle } from "./components/ContentSubmission";
 import VerificationResult from "./components/VerificationResult";
 import BlockchainRecord from "./components/BlockchainRecord";
 import AIAnalysis from "./components/AIAnalysis";
@@ -19,9 +19,10 @@ import "./App.css";
 import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
+  const contentSubmissionRef = useRef<ContentSubmissionHandle>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [selectedContentType, setSelectedContentType] = useState<ContentType>(
-    ContentType.TEXT
+  const [selectedContentType, setSelectedContentType] = useState<ContentType | null>(
+    null
   );
   const [verificationResult, setVerificationResult] = useState<Result | null>(
     null
@@ -46,8 +47,12 @@ function App() {
 
   const handleContentSubmit = async (
     content: string,
-    contentType: ContentType
+    contentType: ContentType | null
   ) => {
+    // If contentType is null, we shouldn't proceed with verification
+    if (contentType === null) {
+      return;
+    }
     setIsProcessing(true);
     setCurrentContent(content);
     setSelectedContentType(contentType);
@@ -109,10 +114,16 @@ function App() {
       alert("An error occurred during verification. Please try again.");
     } finally {
       setIsProcessing(false);
+      // Reset the form after verification is complete
+      if (contentSubmissionRef.current) {
+        contentSubmissionRef.current.resetForm();
+      }
     }
   };
 
-  const getContentTypeString = (type: ContentType): string => {
+  const getContentTypeString = (type: ContentType | null): string => {
+    if (type === null) return "None";
+    
     switch (type) {
       case ContentType.TEXT:
         return "Text";
@@ -215,6 +226,7 @@ function App() {
 
           <div className="mb-8">
             <ContentSubmission
+              ref={contentSubmissionRef}
               onSubmit={handleContentSubmit}
               isProcessing={isProcessing}
             />
