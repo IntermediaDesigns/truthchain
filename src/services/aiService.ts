@@ -1,7 +1,6 @@
 import axios from "axios";
 import * as transformers from "@xenova/transformers";
 
-// Type for verification result
 export interface VerificationResult {
   isVerified: boolean;
   confidenceScore: number;
@@ -10,7 +9,6 @@ export interface VerificationResult {
   sourceUrl?: string;
 }
 
-// Content types
 export enum ContentType {
   TEXT = "text",
   IMAGE = "image",
@@ -19,26 +17,19 @@ export enum ContentType {
 
 export class AIService {
   private geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-  // Models for image analysis
   private imageClassifier: any = null;
   private imageManipulationDetector: any = null;
   private isImageClassifierReady = false;
   private isManipulationDetectorReady = false;
 
-  /**
-   * Initialize the service and load models
-   */
   public async initialize(): Promise<void> {
     console.log("AI service initializing...");
 
     try {
-      // Initialize progress handler
       const progress = (data: any) => {
         console.log(`Loading ${data.file}: ${data.progress.toFixed(2)}%`);
       };
 
-      // Load image classification model
       console.log("Loading image classification model...");
       this.imageClassifier = await transformers.pipeline(
         "image-classification",
@@ -47,8 +38,6 @@ export class AIService {
       );
       this.isImageClassifierReady = true;
       console.log("Image classification model loaded");
-
-      // For image manipulation detection, we'll load an additional model
       console.log("Loading image manipulation detection model...");
       this.imageManipulationDetector = await transformers.pipeline(
         "image-classification",
@@ -68,12 +57,8 @@ export class AIService {
     }
   }
 
-  /**
-   * Verify text content by querying Gemini API
-   */
   public async verifyText(text: string): Promise<VerificationResult> {
     try {
-      // Check if we can use Gemini API
       if (!this.geminiApiKey) {
         throw new Error("Gemini API key not configured");
       }
@@ -116,11 +101,7 @@ export class AIService {
         }
       );
 
-      // Extract the response text
       const responseText = response.data.candidates[0].content.parts[0].text;
-
-      // Parse the JSON from the response
-      // First, find the JSON object in the response which may contain other text
       const jsonMatch = responseText.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
         throw new Error("Could not find JSON in Gemini response");
@@ -138,16 +119,11 @@ export class AIService {
     } catch (error) {
       console.error("Text verification error:", error);
 
-      // Fall back to pattern-based analysis if API fails
       return this.fallbackTextAnalysis(text);
     }
   }
 
-  /**
-   * Fallback text analysis using pattern matching when API is unavailable
-   */
   private fallbackTextAnalysis(text: string): VerificationResult {
-    // CREDIBILITY MARKERS
     const credibilityMarkers = [
       {
         pattern:
@@ -183,7 +159,6 @@ export class AIService {
       },
     ];
 
-    // MISINFORMATION INDICATORS
     const misinfoIndicators = [
       {
         pattern: /\b(exclusive|breaking|shocking)\b/i,
@@ -212,11 +187,10 @@ export class AIService {
       },
     ];
 
-    let score = 65; // Start with a neutral-positive score
+    let score = 65;
     let foundCredibilityMarkers = [];
     let foundMisinfoIndicators = [];
 
-    // Check for credibility markers
     for (const marker of credibilityMarkers) {
       if (marker.pattern.test(text)) {
         score += marker.weight;
@@ -224,18 +198,15 @@ export class AIService {
       }
     }
 
-    // Check for misinformation indicators
     for (const indicator of misinfoIndicators) {
       if (indicator.pattern.test(text)) {
-        score += indicator.weight; // These are negative weights
+        score += indicator.weight;
         foundMisinfoIndicators.push(indicator.name);
       }
     }
 
-    // Cap the score between 0 and 100
     score = Math.max(0, Math.min(100, score));
 
-    // Generate explanation
     let explanation = "API unavailable. Using pattern analysis: ";
     if (score >= 80) {
       explanation +=
@@ -275,12 +246,8 @@ export class AIService {
     };
   }
 
-  /**
-   * Verify URL content by analyzing the domain and potentially the content
-   */
   public async verifyUrl(url: string): Promise<VerificationResult> {
     try {
-      // Extract domain for context
       let domain = "";
       try {
         domain = new URL(url).hostname;
@@ -293,7 +260,6 @@ export class AIService {
         };
       }
 
-      // Check if we can use Gemini API
       if (this.geminiApiKey) {
         try {
           const response = await axios.post(
@@ -334,11 +300,9 @@ export class AIService {
             }
           );
 
-          // Extract the response text
           const responseText =
             response.data.candidates[0].content.parts[0].text;
 
-          // Parse the JSON from the response
           const jsonMatch = responseText.match(/\{[\s\S]*\}/);
           if (!jsonMatch) {
             throw new Error("Could not find JSON in Gemini response");
@@ -355,11 +319,9 @@ export class AIService {
           };
         } catch (error) {
           console.error("Gemini URL verification error:", error);
-          // Fall back to domain analysis
         }
       }
 
-      // Fallback domain analysis
       return this.fallbackUrlAnalysis(url, domain);
     } catch (error) {
       console.error("URL verification error:", error);
@@ -372,11 +334,7 @@ export class AIService {
     }
   }
 
-  /**
-   * Fallback URL analysis when API is unavailable
-   */
   private fallbackUrlAnalysis(url: string, domain: string): VerificationResult {
-    // List of trusted domains (expanded)
     const trustedDomains = [
       "wikipedia.org",
       "github.com",
@@ -425,7 +383,6 @@ export class AIService {
       "netflix.com",
     ];
 
-    // Domain categories with reputation scores
     const domainCategories = {
       academic: {
         patterns: [".edu", "university", "college", "academic", "school"],
@@ -445,10 +402,8 @@ export class AIService {
       },
     };
 
-    // Check for exact domain match in trusted domains
     const exactMatch = trustedDomains.some((td) => domain.endsWith(td));
 
-    // Check domain categories
     let categoryScore = 0;
     let category = "";
 
@@ -464,7 +419,6 @@ export class AIService {
       }
     }
 
-    // Calculate final score
     let finalScore = 0;
 
     if (exactMatch) {
@@ -472,17 +426,14 @@ export class AIService {
     } else if (categoryScore > 0) {
       finalScore = categoryScore;
     } else {
-      // Basic TLD analysis
       if (domain.endsWith(".org")) finalScore = 75;
       else if (domain.endsWith(".com")) finalScore = 65;
       else if (domain.endsWith(".net")) finalScore = 60;
       else finalScore = 50;
     }
 
-    // Determine verification status
     const isVerified = finalScore >= 70;
 
-    // Create explanation
     let explanation = "API unavailable. Using domain analysis: ";
     if (exactMatch) {
       explanation += `This URL is from a well-known, generally reliable domain (${domain}).`;
@@ -506,15 +457,10 @@ export class AIService {
     };
   }
 
-  /**
-   * Verify image content using Gemini Vision API (if available) and Hugging Face models
-   */
   public async verifyImage(imageData: string): Promise<VerificationResult> {
     try {
-      // First, try to use Gemini Vision if the API key is available
       if (this.geminiApiKey) {
         try {
-          // Gemini requires base64 without the data URI prefix
           const base64Data = imageData.split(",")[1];
 
           const response = await axios.post(
@@ -526,22 +472,22 @@ export class AIService {
                   parts: [
                     {
                       text: `As an image verification specialist, analyze this image for authenticity and potential manipulation.
-  
-  Provide your analysis as a JSON object with these fields:
-  1. "isVerified" (boolean): true if the image appears authentic/unaltered, false if it shows signs of manipulation
-  2. "confidenceScore" (number): a score between 0-100 representing your confidence
-  3. "explanation" (string): a DETAILED analysis explaining your assessment, what the image appears to show, any signs of alteration you noticed, and quality indicators - this should be at least 3-4 sentences and will be shown in a separate "Detailed Analysis" section
-  
-  Be comprehensive in your detailed explanation but keep the top-level authenticity judgment concise.`
+
+Provide your analysis as a JSON object with these fields:
+1. "isVerified" (boolean): true if the image appears authentic/unaltered, false if it shows signs of manipulation
+2. "confidenceScore" (number): a score between 0-100 representing your confidence
+3. "explanation" (string): a DETAILED analysis explaining your assessment, what the image appears to show, any signs of alteration you noticed, and quality indicators - this should be at least 3-4 sentences and will be shown in a separate "Detailed Analysis" section
+
+Be comprehensive in your detailed explanation but keep the top-level authenticity judgment concise.`,
                     },
                     {
                       inline_data: {
                         mime_type: "image/jpeg",
-                        data: base64Data
-                      }
-                    }
-                  ]
-                }
+                        data: base64Data,
+                      },
+                    },
+                  ],
+                },
               ],
               generationConfig: {
                 temperature: 0.2,
@@ -557,11 +503,9 @@ export class AIService {
             }
           );
 
-          // Extract the response text
           const responseText =
             response.data.candidates[0].content.parts[0].text;
 
-          // Parse the JSON from the response
           const jsonMatch = responseText.match(/\{[\s\S]*\}/);
           if (!jsonMatch) {
             throw new Error("Could not find JSON in Gemini response");
@@ -578,20 +522,16 @@ export class AIService {
           };
         } catch (error) {
           console.error("Gemini Vision API error:", error);
-          // Fall back to Hugging Face models
         }
       }
 
-      // Fallback: Use Hugging Face models
       if (!this.isImageClassifierReady || !this.isManipulationDetectorReady) {
         await this.initialize();
       }
 
-      // Create an image element from the data
       const img = document.createElement("img");
       img.src = imageData;
 
-      // Wait for the image to load
       await new Promise((resolve) => {
         img.onload = resolve;
         img.onerror = () => {
@@ -599,44 +539,31 @@ export class AIService {
         };
       });
 
-      // Run image through both models
       const [classificationResult, manipulationResult] = await Promise.all([
         this.imageClassifier(img),
         this.imageManipulationDetector(img),
       ]);
 
-      // Extract top predictions
       const topClass = classificationResult[0];
       const topManipulationClass = manipulationResult[0];
 
-      // Calculate authenticity score based on multiple factors
       let authenticityScore = 0;
 
-      // Factor 1: Confidence in the top classification
-      // Higher confidence suggests a clearer, more recognizable image
       const classificationConfidence = topClass.score * 100;
-      authenticityScore += classificationConfidence * 0.4; // 40% of the score
+      authenticityScore += classificationConfidence * 0.4;
 
-      // Factor 2: Agreement between models
-      // If both models come to similar conclusions, that's a good sign
       const modelAgreement = this.calculateModelAgreement(
         classificationResult,
         manipulationResult
       );
-      authenticityScore += modelAgreement * 0.3; // 30% of the score
+      authenticityScore += modelAgreement * 0.3;
 
-      // Factor 3: Image clarity and quality indicators
-      // This is a crude approximation - real image forensics would be more sophisticated
       const imageQuality = this.estimateImageQuality(img);
-      authenticityScore += imageQuality * 0.3; // 30% of the score
+      authenticityScore += imageQuality * 0.3;
 
-      // Round to nearest integer
       const finalScore = Math.round(authenticityScore);
-
-      // Determine if verified (over 70 is verified)
       const isVerified = finalScore >= 70;
 
-      // Create explanation
       let explanation = "";
       if (isVerified) {
         explanation = `This appears to be an authentic image of ${
@@ -683,17 +610,10 @@ export class AIService {
     }
   }
 
-  /**
-   * Calculate agreement between different model outputs
-   */
   private calculateModelAgreement(
     classificationResult: any[],
     manipulationResult: any[]
   ): number {
-    // Check for overlapping or semantically related classifications
-    // This is a simplified implementation - a real system would use semantic similarity
-
-    // Extract top 3 classes from each model
     const topClasses = classificationResult
       .slice(0, 3)
       .map((c) => c.label.toLowerCase());
@@ -701,57 +621,36 @@ export class AIService {
       .slice(0, 3)
       .map((c) => c.label.toLowerCase());
 
-    // Check for direct overlap in top classes
     let overlapCount = 0;
     for (const cls of topClasses) {
       for (const manipCls of topManipulationClasses) {
-        // Check if class names are similar enough (contains each other)
         if (cls.includes(manipCls) || manipCls.includes(cls)) {
           overlapCount++;
         }
       }
     }
 
-    // Calculate agreement score (0-100)
-    // More overlap = higher agreement = higher score
     const agreementScore = (overlapCount / 3) * 100;
-
-    // Check confidence of top predictions
     const classificationConfidence = classificationResult[0].score;
     const manipulationConfidence = manipulationResult[0].score;
-
-    // If both models are very confident, that's a good sign
     const confidenceAgreement =
       classificationConfidence * manipulationConfidence * 100;
 
-    // Combine scores, weighting overlap more heavily
     return agreementScore * 0.7 + confidenceAgreement * 0.3;
   }
 
-  /**
-   * Estimate image quality based on simple heuristics
-   * In a real system, you'd use more sophisticated image forensics
-   */
   private estimateImageQuality(img: HTMLImageElement): number {
-    // Basic quality check based on resolution
-    // Higher resolution generally indicates a more authentic image
-    // (though this is very simplistic)
     const resolutionScore = Math.min(
       100,
       Math.max(0, (img.naturalWidth * img.naturalHeight) / 10000)
     );
 
-    // Check aspect ratio - extreme ratios can be suspicious
     const aspectRatio = img.naturalWidth / img.naturalHeight;
     const aspectScore = aspectRatio > 0.5 && aspectRatio < 2.0 ? 100 : 70;
 
-    // Combine scores
     return resolutionScore * 0.7 + aspectScore * 0.3;
   }
 
-  /**
-   * Main verification method
-   */
   public async verifyContent(
     content: string,
     contentType: ContentType
@@ -784,6 +683,5 @@ export class AIService {
   }
 }
 
-// Create and export singleton instance
 const aiService = new AIService();
 export { aiService };
