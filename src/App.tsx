@@ -16,6 +16,7 @@ import {
 } from "./services/blockchainService";
 import { storageService } from "./services/storageService";
 import "./App.css";
+import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -31,7 +32,6 @@ function App() {
   const [currentContent, setCurrentContent] = useState<string>("");
   const [contentHash, setContentHash] = useState<string>("");
 
-  // Initialize AI service when component mounts
   useEffect(() => {
     const initAI = async () => {
       try {
@@ -44,7 +44,6 @@ function App() {
     initAI();
   }, []);
 
-  // Handle content submission
   const handleContentSubmit = async (
     content: string,
     contentType: ContentType
@@ -56,19 +55,15 @@ function App() {
     setBlockchainRecord(null);
     setIsStoredOnBlockchain(false);
 
-    // Generate content hash
     const hash = blockchainService.generateContentHash(content);
     setContentHash(hash);
 
     try {
-      // First, check if this content has already been verified on the blockchain
       const existingRecord = await blockchainService.getVerification(content);
 
       if (existingRecord && existingRecord.timestamp > 0) {
-        // Content was previously verified
         setBlockchainRecord(existingRecord);
 
-        // Create a result object from the blockchain record
         setVerificationResult({
           isVerified: existingRecord.isVerified,
           confidenceScore: existingRecord.confidenceScore,
@@ -82,11 +77,9 @@ function App() {
 
         setIsStoredOnBlockchain(true);
       } else {
-        // Content needs to be verified
         const result = await aiService.verifyContent(content, contentType);
         setVerificationResult(result);
 
-        // Store the verification result on the blockchain
         const success = await blockchainService.verifyContent(
           content,
           result.isVerified,
@@ -98,11 +91,9 @@ function App() {
         if (success) {
           setIsStoredOnBlockchain(true);
 
-          // Get the record back from the blockchain
           const record = await blockchainService.getVerification(content);
           setBlockchainRecord(record);
 
-          // Save to local storage
           storageService.saveVerification(
             content,
             contentType,
@@ -121,7 +112,6 @@ function App() {
     }
   };
 
-  // Content type string representation
   const getContentTypeString = (type: ContentType): string => {
     switch (type) {
       case ContentType.TEXT:
@@ -136,7 +126,8 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <ThemeProvider>
+    <div className="min-h-screen bg-gray-100 flex flex-col dark:bg-gray-900 transition-colors duration-200">
       <Header />
 
       <main className="container mx-auto px-4 py-8 flex-grow">
@@ -249,6 +240,7 @@ function App() {
 
       <Footer />
     </div>
+    </ThemeProvider>
   );
 }
 
