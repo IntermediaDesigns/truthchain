@@ -1,7 +1,6 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { ContentType } from "../services/aiService";
 
-// Define the handle type for the ref
 export interface ContentSubmissionHandle {
   resetForm: () => void;
 }
@@ -13,26 +12,22 @@ interface ContentSubmissionProps {
 
 const ContentSubmission = forwardRef<ContentSubmissionHandle, ContentSubmissionProps>(
   ({ onSubmit, isProcessing }, ref) => {
-    // Use null as the default state to represent "Select type"
     const [contentType, setContentType] = useState<ContentType | null>(null);
     const [content, setContent] = useState("");
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-    // Function to reset the form state
     const resetFormState = () => {
       setContentType(null);
       setContent("");
       setImagePreview(null);
     };
 
-    // Expose the resetForm method to parent components
     useImperativeHandle(ref, () => ({
       resetForm: resetFormState
     }));
 
     const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const value = e.target.value;
-      // Handle the default "select" option
       if (value === "select") {
         setContentType(null);
       } else {
@@ -77,7 +72,6 @@ const ContentSubmission = forwardRef<ContentSubmissionHandle, ContentSubmissionP
         return;
       }
       onSubmit(content, contentType);
-      // We'll let the parent component handle the reset after verification is complete
     };
 
     return (

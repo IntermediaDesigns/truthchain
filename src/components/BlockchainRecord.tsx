@@ -6,7 +6,7 @@ interface BlockchainRecordProps {
   record: VerificationRecord | null;
   contentHash?: string;
   aiResult?: VerificationResult | null;
-  contentType?: ContentType | null; // Updated to accept null
+  contentType?: ContentType | null;
 }
 
 const BlockchainRecord: React.FC<BlockchainRecordProps> = ({
